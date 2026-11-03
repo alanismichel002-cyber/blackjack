@@ -12,7 +12,7 @@ const DECK_COUNT = 6;
 const RESHUFFLE_AT = 78; // reshuffle when ~1.5 decks remain (the "cut card")
 const STARTING_BANKROLL = 1000;
 const CARD_BACK = "https://deckofcardsapi.com/static/img/back.png";
-const STORAGE_KEY = "blackjack.bankroll";
+let storageKey = "blackjack.bankroll"; // made per-user once someone signs in
 
 const state = {
   deckId: null,
@@ -51,7 +51,7 @@ const el = {
 
 function loadBankroll() {
   try {
-    const saved = Number(localStorage.getItem(STORAGE_KEY));
+    const saved = Number(localStorage.getItem(storageKey));
     return Number.isFinite(saved) && saved > 0 ? saved : STARTING_BANKROLL;
   } catch {
     return STARTING_BANKROLL;
@@ -60,7 +60,7 @@ function loadBankroll() {
 
 function saveBankroll() {
   try {
-    localStorage.setItem(STORAGE_KEY, String(state.bankroll));
+    localStorage.setItem(storageKey, String(state.bankroll));
   } catch {
     /* storage unavailable (private mode etc.) - play continues without saving */
   }
@@ -511,10 +511,24 @@ document.addEventListener("keydown", (e) => {
   else if (key === "p") split();
 });
 
-(async function init() {
+/**
+ * Called by auth.js once a player is signed in. Each Google account keeps its
+ * own bankroll in this browser.
+ */
+window.startBlackjack = async function startBlackjack(userId) {
+  const key = `blackjack.bankroll.${userId}`;
+  if (key === storageKey && state.deckId) return; // already running for this player
+  storageKey = key;
+  state.bankroll = loadBankroll();
+  state.bet = 0;
+  startBetting();
   render();
+  if (state.deckId) {
+    setMessage("Place your bet, then press Deal.");
+    return;
+  }
   await run(async () => {
     await newShoe();
     setMessage("Place your bet, then press Deal.");
   });
-})();
+};
