@@ -29,6 +29,18 @@ Supabase dashboard setup:
 2. **Authentication → URL Configuration:** set **Site URL** to your Netlify URL. Under **Redirect URLs**, add your Netlify URL and `http://localhost:8000` for local testing.
 3. In Google Cloud Console, the OAuth client's **Authorized redirect URI** must be `https://fvyvsrvaaoaxrbutlubw.supabase.co/auth/v1/callback`.
 
+## Player profiles
+
+Signed-in players get a **Profile** tab where they can create and edit a profile: display name, a unique username, location, favorite hand, bio, and an optional custom profile picture (otherwise their Google photo is used). Once saved, the greeting uses their chosen name and picture.
+
+Profiles live in the Supabase `profiles` table. **Run `supabase/profiles.sql` once** in Supabase (SQL Editor → New query → paste → Run). It:
+
+- adds the profile columns to the existing `profiles` table (it never deletes data and is safe to run again)
+- enforces username rules (3–20 letters, numbers or underscores, unique regardless of capitalisation) and length limits
+- turns on Row Level Security so signed-in players can view profiles but only create and edit their own; signed-out visitors can't read any
+
+`profile.js` handles the Profile tab.
+
 ## How it uses the Deck of Cards API
 
 | Endpoint | Used for |

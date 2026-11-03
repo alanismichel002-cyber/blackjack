@@ -34,6 +34,17 @@
       <button id="sign-out" class="link">Sign out</button>
     </div>
 
+    <nav class="tabs" role="tablist" aria-label="Sections">
+      <button id="tab-btn-play" class="tab" role="tab" aria-selected="true" aria-controls="tab-play" data-tab="play">Play</button>
+      <button id="tab-btn-profile" class="tab" role="tab" aria-selected="false" aria-controls="tab-profile" data-tab="profile">Profile</button>
+    </nav>
+
+    <div id="tab-play" class="tab-panel" role="tabpanel" aria-labelledby="tab-btn-play">
+    <div id="profile-nudge" class="nudge hidden">
+      <span>You haven't set up your player profile yet.</span>
+      <button class="btn primary small" data-tab="profile">Create profile</button>
+    </div>
+
     <header class="topbar">
       <h1>Blackjack</h1>
       <div class="stats">
@@ -77,6 +88,81 @@
       </div>
     </section>
 
+    </div>
+
+    <section id="tab-profile" class="tab-panel profile hidden" role="tabpanel" aria-labelledby="tab-btn-profile">
+      <p id="profile-loading" class="muted">Loading your profile…</p>
+
+      <!-- Read-only profile card -->
+      <div id="profile-view" class="profile-card hidden">
+        <div class="profile-head">
+          <img id="pv-avatar" class="avatar avatar-lg" alt="" referrerpolicy="no-referrer" />
+          <div>
+            <h2 id="pv-name" class="profile-name"></h2>
+            <p id="pv-username" class="muted"></p>
+          </div>
+        </div>
+        <p id="pv-bio" class="profile-bio"></p>
+        <dl class="profile-facts">
+          <div><dt>Location</dt><dd id="pv-location"></dd></div>
+          <div><dt>Favorite hand</dt><dd id="pv-hand"></dd></div>
+          <div><dt>Member since</dt><dd id="pv-since"></dd></div>
+        </dl>
+        <button id="pv-edit" class="btn primary">Edit profile</button>
+      </div>
+
+      <!-- Create / edit form -->
+      <form id="profile-form" class="profile-card hidden" novalidate>
+        <h2 id="pf-title" class="profile-name">Create your profile</h2>
+        <p id="pf-subtitle" class="muted">Tell the table who you are. Other signed-in players can see your profile.</p>
+
+        <div class="profile-head">
+          <img id="pf-avatar-preview" class="avatar avatar-lg" alt="Profile picture preview" referrerpolicy="no-referrer" />
+          <div class="field grow">
+            <label for="pf-avatar">Profile picture URL <span class="muted">(optional)</span></label>
+            <input id="pf-avatar" type="url" maxlength="500" placeholder="Leave blank to use your Google photo" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="pf-name">Display name</label>
+          <input id="pf-name" type="text" maxlength="50" required autocomplete="name" />
+        </div>
+        <div class="field">
+          <label for="pf-username">Username</label>
+          <div class="input-prefix"><span>@</span><input id="pf-username" type="text" maxlength="20" required autocomplete="username" spellcheck="false" /></div>
+          <small class="muted">3–20 letters, numbers or underscores.</small>
+        </div>
+        <div class="field">
+          <label for="pf-location">Location <span class="muted">(optional)</span></label>
+          <input id="pf-location" type="text" maxlength="60" placeholder="e.g. Las Vegas, NV" />
+        </div>
+        <div class="field">
+          <label for="pf-hand">Favorite hand <span class="muted">(optional)</span></label>
+          <select id="pf-hand">
+            <option value="">No favorite</option>
+            <option>Blackjack (Ace + 10)</option>
+            <option>Pair of Aces</option>
+            <option>Double down on 11</option>
+            <option>Five-card Charlie</option>
+            <option>Hard 20</option>
+            <option>Soft 18</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="pf-bio">Bio <span class="muted">(optional)</span></label>
+          <textarea id="pf-bio" rows="3" maxlength="280" placeholder="High roller? Card counter? Just here for fun?"></textarea>
+          <small class="muted"><span id="pf-bio-count">0</span>/280</small>
+        </div>
+
+        <p id="pf-error" class="form-error" role="alert"></p>
+        <div class="buttons start">
+          <button id="pf-save" type="submit" class="btn primary">Save profile</button>
+          <button id="pf-cancel" type="button" class="btn secondary hidden">Cancel</button>
+        </div>
+      </form>
+    </section>
+
     <footer class="footer">
       <p>Dealer stands on soft 17 · Blackjack pays 3:2 · 6-deck shoe</p>
       <p>
@@ -89,6 +175,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
   <script src="config.js"></script>
   <script src="app.js"></script>
+  <script src="profile.js"></script>
   <script src="auth.js"></script>
 </body>
 </html>

@@ -503,7 +503,8 @@ el.split.addEventListener("click", split);
 el.reset.addEventListener("click", resetBankroll);
 
 document.addEventListener("keydown", (e) => {
-  if (e.target.closest("input, textarea")) return;
+  if (e.target.closest("input, textarea, select")) return;
+  if (document.getElementById("tab-play").classList.contains("hidden")) return;
   const key = e.key.toLowerCase();
   if (key === "h") hit();
   else if (key === "s") stand();

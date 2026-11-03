@@ -59,6 +59,7 @@
   }
 
   function showLogin(message = "") {
+    if (window.Profile) window.Profile.reset();
     game.classList.add("hidden");
     loginScreen.classList.remove("hidden");
     loginBtn.disabled = false;
@@ -71,18 +72,7 @@
     const firstName = (meta.given_name || fullName).split(" ")[0];
     const picture = meta.avatar_url || meta.picture;
 
-    greeting.textContent = `Welcome, ${firstName}!`;
-    greeting.title = fullName;
-
-    avatarFallback.textContent = initials(fullName);
-    if (picture) {
-      avatar.src = picture;
-      avatar.alt = fullName;
-      avatar.classList.remove("hidden");
-      avatarFallback.classList.add("hidden");
-    } else {
-      showFallback();
-    }
+    setIdentity(firstName, fullName, picture);
 
     // Tidy the ?code=... left in the address bar after the Google redirect.
     if (window.location.search.includes("code=")) {
@@ -92,6 +82,25 @@
     loginScreen.classList.add("hidden");
     game.classList.remove("hidden");
     window.startBlackjack(user.id);
+    // Load the player's profile; once saved, the greeting uses their chosen name and picture.
+    window.Profile.init(supabase, user, (profile) => {
+      const name = profile.full_name || fullName;
+      setIdentity(name.split(" ")[0], name, profile.avatar_url || picture);
+    });
+  }
+
+  function setIdentity(firstName, fullName, picture) {
+    greeting.textContent = `Welcome, ${firstName}!`;
+    greeting.title = fullName;
+    avatarFallback.textContent = initials(fullName);
+    if (picture) {
+      avatar.src = picture;
+      avatar.alt = fullName;
+      avatar.classList.remove("hidden");
+      avatarFallback.classList.add("hidden");
+    } else {
+      showFallback();
+    }
   }
 
   avatar.addEventListener("error", showFallback);
