@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blackjack</title>
+  <meta name="description" content="Play blackjack in your browser, powered by the Deck of Cards API." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="table">
+    <header class="topbar">
+      <h1>Blackjack</h1>
+      <div class="stats">
+        <div class="stat"><span class="label">Bankroll</span><span id="bankroll" class="value">$0</span></div>
+        <div class="stat"><span class="label">Bet</span><span id="bet" class="value">$0</span></div>
+        <div class="stat"><span class="label">Shoe</span><span id="remaining" class="value">–</span></div>
+      </div>
+    </header>
+
+    <section class="area dealer-area">
+      <h2>Dealer <span id="dealer-score" class="score"></span></h2>
+      <div id="dealer-cards" class="cards"></div>
+    </section>
+
+    <p id="message" class="message" role="status" aria-live="polite">Connecting to the deck…</p>
+
+    <section class="area player-area">
+      <h2>You</h2>
+      <div id="player-hands" class="hands"></div>
+    </section>
+
+    <section id="betting" class="controls">
+      <div class="chips">
+        <button class="chip chip-5" data-chip="5">5</button>
+        <button class="chip chip-25" data-chip="25">25</button>
+        <button class="chip chip-100" data-chip="100">100</button>
+        <button class="chip chip-500" data-chip="500">500</button>
+      </div>
+      <div class="buttons">
+        <button id="clear-bet" class="btn secondary">Clear</button>
+        <button id="deal" class="btn primary">Deal</button>
+      </div>
+    </section>
+
+    <section id="actions" class="controls hidden">
+      <div class="buttons">
+        <button id="hit" class="btn">Hit</button>
+        <button id="stand" class="btn">Stand</button>
+        <button id="double" class="btn">Double</button>
+        <button id="split" class="btn">Split</button>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>Dealer stands on soft 17 · Blackjack pays 3:2 · 6-deck shoe</p>
+      <p>
+        <button id="reset" class="link">Reset bankroll</button> ·
+        Cards by <a href="https://deckofcardsapi.com/" target="_blank" rel="noopener">Deck of Cards API</a>
+      </p>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
